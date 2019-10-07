@@ -127,7 +127,7 @@ export class OdooConnector {
     return odoo$;
   }
 
-  public create(model: string, keyword: any): any {
+  public create(model: string, keyword?: any): any {
     console.log('Create on:', model);
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
