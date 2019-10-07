@@ -11,17 +11,13 @@ export class OdooConnector {
   constructor() { }
 
   public login(server: string, db: string, user: string, pass: string): any {
-    const fUser = $.xmlrpc.force('string', user);
-    const fPassword = $.xmlrpc.force('string', pass);
-    const fDbName = $.xmlrpc.force('string', db);
-
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
         url: server + '/xmlrpc/2/common',
         methodName: 'login',
         dataType: 'xmlrpc',
         crossDomain: true,
-        params: [fDbName, fUser, fPassword],
+        params: [db, user, pass],
         success: (response: any, status: any, jqXHR: any) => {
           observer.next(response);
           observer.complete();
