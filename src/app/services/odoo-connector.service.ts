@@ -1,7 +1,8 @@
 /*
  * Odoo Connector Service by Moldeo Interactive
- * Developer: Ignacio Buioli
+ * Developer: Ignacio Buioli (ibuioli@gmail.com)
  * Company: Moldeo Interactive (www.moldeointeractive.com.ar)
+ * Company Contact: info@moldeointeractive.com.ar
  */
 
 import { Injectable } from '@angular/core';
@@ -13,14 +14,24 @@ declare var $: any;
   providedIn: 'root'
 })
 export class OdooConnector {
+  server: string;
+  db: string;
+  user: string;
+  pass: string;
+  uid: string;
 
-  constructor() { }
+  constructor(server: string, db: string, user: string, pass: string) {
+    this.server = server;
+    this.db = db;
+    this.user = user;
+    this.pass = pass;
+  }
 
-  public data(server: string): any {
+  public data(): any {
     console.log('Getting Odoo Data');
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
-        url: server + '/xmlrpc/2/common',
+        url: this.server + '/xmlrpc/2/common',
         methodName: 'version',
         dataType: 'xmlrpc',
         crossDomain: true,
@@ -39,23 +50,49 @@ export class OdooConnector {
     return odoo$;
   }
 
-  public login(server: string, db: string, user: string, pass: string): any {
+  public login(): any {
     console.log('Getting UID');
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
-        url: server + '/xmlrpc/2/common',
+        url: this.server + '/xmlrpc/2/common',
         methodName: 'login',
         dataType: 'xmlrpc',
         crossDomain: true,
-        params: [db, user, pass],
+        params: [this.db, this.user, this.pass],
         success: (response: any, status: any, jqXHR: any) => {
           console.log('UID:', status);
           console.log('UID:', response);
+          this.uid = response[0];
           observer.next(response);
           observer.complete();
         },
         error: (jqXHR: any, status: any, error: any) => {
           console.log('UID:', status);
+          console.log('Err:', error);
+          observer.error(error);
+        }
+      });
+    });
+
+    return odoo$;
+  }
+
+  public searchRead(model: string, param: any, keyword: any = {}): any {
+    console.log('Search & Read:', model, param, keyword);
+    const odoo$ = new Observable(observer => {
+      $.xmlrpc({
+        url: this.server + '/xmlrpc/2/object',
+        methodName: 'execute_kw',
+        dataType: 'xmlrpc',
+        crossDomain: true,
+        params: [this.db, this.uid, this.pass, model, 'search_read', [ param ] , keyword],
+        success: (response: any, status: any, jqXHR: any) => {
+          console.log('Search & Read, ' + model + ' status:', status);
+          observer.next(response);
+          observer.complete();
+        },
+        error: (jqXHR: any, status: any, error: any) => {
+          console.log(status);
           console.log('Err:', error);
           observer.error(error);
         }
