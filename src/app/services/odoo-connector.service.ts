@@ -77,8 +77,8 @@ export class OdooConnector {
     return odoo$;
   }
 
-  public searchRead(model: string, param: any, keyword: any = {}): any {
-    console.log('Search & Read:', model, param, keyword);
+  public searchRead(model: string, param?: any, keyword?: any): any {
+    console.log('Search & Read:', model);
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
         url: this.server + '/xmlrpc/2/object',
