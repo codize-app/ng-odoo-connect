@@ -92,7 +92,32 @@ export class OdooConnector {
           observer.complete();
         },
         error: (jqXHR: any, status: any, error: any) => {
-          console.log(status);
+          console.log('Search & Read, ' + model + ' status:', status);
+          console.log('Err:', error);
+          observer.error(error);
+        }
+      });
+    });
+
+    return odoo$;
+  }
+
+  public write(model: string, id: number, keyword: any): any {
+    console.log('Write on:', model);
+    const odoo$ = new Observable(observer => {
+      $.xmlrpc({
+        url: this.server + '/xmlrpc/2/object',
+        methodName: 'execute_kw',
+        dataType: 'xmlrpc',
+        crossDomain: true,
+        params: [this.db, this.uid, this.pass, model, 'write', [[id], keyword]],
+        success: (response: any, status: any, jqXHR: any) => {
+          console.log('Search & Read, ' + model + ' status:', status);
+          observer.next(response);
+          observer.complete();
+        },
+        error: (jqXHR: any, status: any, error: any) => {
+          console.log('Search & Read, ' + model + ' status:', status);
           console.log('Err:', error);
           observer.error(error);
         }
