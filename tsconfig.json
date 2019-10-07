@@ -1,7 +1,10 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "src",
+    "paths": {
+      "@service/odoo": ["app/services/odoo-connector.service"]
+    },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,

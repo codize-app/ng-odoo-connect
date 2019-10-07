@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OdooConnector } from './services/odoo-connector.service';
+import { OdooConnector } from '@service/odoo';
 
 @Component({
   selector: 'app-root',
@@ -13,12 +13,9 @@ export class AppComponent implements OnInit {
   constructor(public odoo: OdooConnector) {}
 
   public ngOnInit(): void {
-    this.odoo.data('http://localhost:8069').subscribe((res: any) => {
-      console.log('Odoo Data:', res[0]);
-    });
+    this.odoo.data('http://localhost:8069').subscribe((res: any) => {});
 
     this.odoo.login('http://localhost:8069', 'odoo', 'admin', 'admin').subscribe((res: any) => {
-      console.log('UID:', res[0]);
       this.uid = res[0];
     });
   }
