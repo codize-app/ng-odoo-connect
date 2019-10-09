@@ -1,5 +1,11 @@
 # NgOdooConnect Service
 
+### Load like SubModule
+
+```
+git submodule add https://github.com/ctmil/ng-odoo-connect.git
+```
+
 ### Example
 
 ```javascript
