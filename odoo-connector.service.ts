@@ -5,14 +5,10 @@
  * Company Contact: info@moldeointeractive.com.ar
  */
 
-import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 declare var jquery: any;
 declare var $: any;
 
-@Injectable({
-  providedIn: 'root'
-})
 export class OdooConnector {
   server: string;
   db: string;
