@@ -151,6 +151,31 @@ export class OdooConnector {
     return odoo$;
   }
 
+  public fieldsGet(model: string, keyword?: any): any {
+    console.log('Fields get on:', model);
+    const odoo$ = new Observable(observer => {
+      $.xmlrpc({
+        url: this.server + '/xmlrpc/2/object',
+        methodName: 'execute_kw',
+        dataType: 'xmlrpc',
+        crossDomain: true,
+        params: [this.db, this.uid, this.pass, model, 'fields_get', [keyword]],
+        success: (response: any, status: any, jqXHR: any) => {
+          console.log('Fields get, ' + model + ' status:', status);
+          observer.next(response);
+          observer.complete();
+        },
+        error: (jqXHR: any, status: any, error: any) => {
+          console.log('Fields get, ' + model + ' status:', status);
+          console.log('Err:', error);
+          observer.error(error);
+        }
+      });
+    });
+
+    return odoo$;
+  }
+
   public renderReport(model: string, id: number): any {
     console.log('Render Report on:', model);
     const odoo$ = new Observable(observer => {
