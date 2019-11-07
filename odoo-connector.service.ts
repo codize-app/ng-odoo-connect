@@ -19,11 +19,12 @@ export class OdooConnector {
   pass: string;
   uid: string;
 
-  constructor(server: string, db: string, user: string, pass: string) {
+  constructor(server: string, db: string, user: string, pass: string, uid?: string) {
     this.server = server;
     this.db = db;
     this.user = user;
     this.pass = pass;
+    this.uid = uid;
   }
 
   public data(): any {
