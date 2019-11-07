@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { OdooConnectorService } from './odoo-connector.service';
+import { OdooConnector } from './odoo-connector.service';
 
-describe('OdooConnectorService', () => {
+describe('OdooConnector', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: OdooConnectorService = TestBed.get(OdooConnectorService);
+    const service: OdooConnector = TestBed.get(OdooConnector);
     expect(service).toBeTruthy();
   });
 });

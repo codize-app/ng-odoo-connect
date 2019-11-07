@@ -2,7 +2,7 @@
  * Odoo Connector Service by Moldeo Interactive
  * Angular 8
  * Requires jQuery & jQuery-XMLRPC
- * 
+ *
  * Developer: Ignacio Buioli (ibuioli@gmail.com)
  * Company: Moldeo Interactive (www.moldeointeractive.com.ar)
  * Company Contact: info@moldeointeractive.com.ar
