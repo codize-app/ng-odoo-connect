@@ -77,6 +77,31 @@ export class OdooConnector {
     return odoo$;
   }
 
+  public searchCount(model: string, param?: any): any {
+    console.log('Search & Count:', model);
+    const odoo$ = new Observable(observer => {
+      $.xmlrpc({
+        url: this.server + '/xmlrpc/2/object',
+        methodName: 'execute_kw',
+        dataType: 'xmlrpc',
+        crossDomain: true,
+        params: [this.db, this.uid, this.pass, model, 'search_count', [ param ]],
+        success: (response: any, status: any, jqXHR: any) => {
+          console.log('Search & Count, ' + model + ' status:', status);
+          observer.next(response);
+          observer.complete();
+        },
+        error: (jqXHR: any, status: any, error: any) => {
+          console.log('Search & Count, ' + model + ' status:', status);
+          console.log('Err:', error);
+          observer.error(error);
+        }
+      });
+    });
+
+    return odoo$;
+  }
+
   public searchRead(model: string, param?: any, keyword?: any): any {
     console.log('Search & Read:', model);
     const odoo$ = new Observable(observer => {
