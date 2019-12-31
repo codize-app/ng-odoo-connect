@@ -20,7 +20,7 @@ export class OdooConnector {
   uid: string;
 
   constructor(server: string, db: string, user: string, pass: string, uid?: string) {
-    this.server = server;
+    this.server = server + '/xmlrpc/2/';
     this.db = db;
     this.user = user;
     this.pass = pass;
@@ -31,7 +31,7 @@ export class OdooConnector {
     console.log('Getting Odoo Data');
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
-        url: this.server + '/xmlrpc/2/common',
+        url: this.server + 'common',
         methodName: 'version',
         dataType: 'xmlrpc',
         crossDomain: true,
@@ -54,7 +54,7 @@ export class OdooConnector {
     console.log('Getting UID');
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
-        url: this.server + '/xmlrpc/2/common',
+        url: this.server + 'common',
         methodName: 'login',
         dataType: 'xmlrpc',
         crossDomain: true,
@@ -81,7 +81,7 @@ export class OdooConnector {
     console.log('Search & Count:', model);
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
-        url: this.server + '/xmlrpc/2/object',
+        url: this.server + 'object',
         methodName: 'execute_kw',
         dataType: 'xmlrpc',
         crossDomain: true,
@@ -106,7 +106,7 @@ export class OdooConnector {
     console.log('Search & Read:', model);
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
-        url: this.server + '/xmlrpc/2/object',
+        url: this.server + 'object',
         methodName: 'execute_kw',
         dataType: 'xmlrpc',
         crossDomain: true,
@@ -131,7 +131,7 @@ export class OdooConnector {
     console.log('Write on:', model);
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
-        url: this.server + '/xmlrpc/2/object',
+        url: this.server + 'object',
         methodName: 'execute_kw',
         dataType: 'xmlrpc',
         crossDomain: true,
@@ -156,7 +156,7 @@ export class OdooConnector {
     console.log('Create on:', model);
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
-        url: this.server + '/xmlrpc/2/object',
+        url: this.server + 'object',
         methodName: 'execute_kw',
         dataType: 'xmlrpc',
         crossDomain: true,
@@ -181,7 +181,7 @@ export class OdooConnector {
     console.log('Fields get on:', model);
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
-        url: this.server + '/xmlrpc/2/object',
+        url: this.server + 'object',
         methodName: 'execute_kw',
         dataType: 'xmlrpc',
         crossDomain: true,
@@ -202,11 +202,11 @@ export class OdooConnector {
     return odoo$;
   }
 
-  public renderReport(model: string, id: number): any {
+  public renderReport(model: string, id: number): any { // Just Odoo 8, 9, 10
     console.log('Render Report on:', model);
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
-        url: this.server + '/xmlrpc/2/report',
+        url: this.server + 'report',
         methodName: 'render_report',
         dataType: 'xmlrpc',
         crossDomain: true,
@@ -231,7 +231,7 @@ export class OdooConnector {
     console.log('Delete on:', model);
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
-        url: this.server + '/xmlrpc/2/object',
+        url: this.server + 'object',
         methodName: 'execute_kw',
         dataType: 'xmlrpc',
         crossDomain: true,
