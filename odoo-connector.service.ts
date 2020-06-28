@@ -29,9 +29,9 @@ export class OdooConnector {
     this.pass = pass;
     this.uid = uid;
 
-    this.common = xmlrpc.createSecureClient(this.server + 'common');
-    this.object = xmlrpc.createSecureClient(this.server + 'object');
-    this.report = xmlrpc.createSecureClient(this.server + 'report');  // Odoo 8, 9, 10
+    this.common = xmlrpc.createClient(this.server + 'common');
+    this.object = xmlrpc.createClient(this.server + 'object');
+    this.report = xmlrpc.createClient(this.server + 'report');  // Odoo 8, 9, 10
   }
 
   public data(): any {
