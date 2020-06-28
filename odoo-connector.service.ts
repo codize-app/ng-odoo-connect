@@ -1,7 +1,7 @@
 /*
  * Odoo Connector Service by Moldeo Interactive
- * Angular 8
- * Requires jQuery & jQuery-XMLRPC
+ * Angular 8, 9
+ * Requires xmlrpc - npm i xmlrpc
  *
  * Developer: Ignacio Buioli (ibuioli@gmail.com)
  * Company: Moldeo Interactive (www.moldeointeractive.com.ar)
@@ -9,8 +9,7 @@
  */
 
 import { Observable } from 'rxjs';
-declare var jquery: any;
-declare var $: any;
+import * as xmlrpc from 'xmlrpc';
 
 export class OdooConnector {
   server: string;
@@ -19,30 +18,33 @@ export class OdooConnector {
   pass: string;
   uid: string;
 
+  common: any;
+  object: any;
+  report: any;
+
   constructor(server: string, db: string, user: string, pass: string, uid?: string) {
     this.server = server + '/xmlrpc/2/';
     this.db = db;
     this.user = user;
     this.pass = pass;
     this.uid = uid;
+
+    this.common = xmlrpc.createSecureClient(this.server + 'common');
+    this.object = xmlrpc.createSecureClient(this.server + 'object');
+    this.report = xmlrpc.createSecureClient(this.server + 'report');  // Odoo 8, 9, 10
   }
 
   public data(): any {
     console.log('Getting Odoo Data');
     const odoo$ = new Observable(observer => {
-      $.xmlrpc({
-        url: this.server + 'common',
-        methodName: 'version',
-        dataType: 'xmlrpc',
-        crossDomain: true,
-        params: [],
-        success: (response: any, status: any, jqXHR: any) => {
-          console.log('Odoo Data:', response);
-          observer.next(response);
-          observer.complete();
-        },
-        error: (jqXHR: any, status: any, error: any) => {
+      this.common.methodCall('version', [], (error: any, value: any) => {
+        if (error) {
+          console.log('Err:', error);
           observer.error(error);
+        } else {
+          console.log('Odoo Data:', value);
+          observer.next(value);
+          observer.complete();
         }
       });
     });
@@ -53,23 +55,15 @@ export class OdooConnector {
   public login(): any {
     console.log('Getting UID');
     const odoo$ = new Observable(observer => {
-      $.xmlrpc({
-        url: this.server + 'common',
-        methodName: 'login',
-        dataType: 'xmlrpc',
-        crossDomain: true,
-        params: [this.db, this.user, this.pass],
-        success: (response: any, status: any, jqXHR: any) => {
-          console.log('UID:', status);
-          console.log('UID:', response);
-          this.uid = response[0];
-          observer.next(response);
-          observer.complete();
-        },
-        error: (jqXHR: any, status: any, error: any) => {
-          console.log('UID:', status);
+      this.common.methodCall('login', [this.db, this.user, this.pass], (error: any, value: any) => {
+        if (error) {
           console.log('Err:', error);
           observer.error(error);
+        } else {
+          console.log('UID:', value);
+          this.uid = value;
+          observer.next(value);
+          observer.complete();
         }
       });
     });
@@ -80,21 +74,15 @@ export class OdooConnector {
   public searchCount(model: string, param?: any): any {
     console.log('Search & Count:', model);
     const odoo$ = new Observable(observer => {
-      $.xmlrpc({
-        url: this.server + 'object',
-        methodName: 'execute_kw',
-        dataType: 'xmlrpc',
-        crossDomain: true,
-        params: [this.db, this.uid, this.pass, model, 'search_count', [ param ]],
-        success: (response: any, status: any, jqXHR: any) => {
-          console.log('Search & Count, ' + model + ' status:', status);
-          observer.next(response);
-          observer.complete();
-        },
-        error: (jqXHR: any, status: any, error: any) => {
-          console.log('Search & Count, ' + model + ' status:', status);
+      this.object.methodCall('execute_kw', [this.db, this.uid, this.pass, model, 'search_count', [ param ]], (error: any, value: any) => {
+        if (error) {
+          console.log('Search & Count, ' + model);
           console.log('Err:', error);
           observer.error(error);
+        } else {
+          console.log('Search & Count, ' + model);
+          observer.next(value);
+          observer.complete();
         }
       });
     });
@@ -105,21 +93,16 @@ export class OdooConnector {
   public searchRead(model: string, param?: any, keyword?: any): any {
     console.log('Search & Read:', model);
     const odoo$ = new Observable(observer => {
-      $.xmlrpc({
-        url: this.server + 'object',
-        methodName: 'execute_kw',
-        dataType: 'xmlrpc',
-        crossDomain: true,
-        params: [this.db, this.uid, this.pass, model, 'search_read', [ param ] , keyword],
-        success: (response: any, status: any, jqXHR: any) => {
-          console.log('Search & Read, ' + model + ' status:', status);
-          observer.next(response);
-          observer.complete();
-        },
-        error: (jqXHR: any, status: any, error: any) => {
-          console.log('Search & Read, ' + model + ' status:', status);
+      this.object.methodCall('execute_kw',
+      [this.db, this.uid, this.pass, model, 'search_read', [ param ], keyword], (error: any, value: any) => {
+        if (error) {
+          console.log('Search & Read, ' + model);
           console.log('Err:', error);
           observer.error(error);
+        } else {
+          console.log('Search & Read, ' + model);
+          observer.next(value);
+          observer.complete();
         }
       });
     });
@@ -130,21 +113,16 @@ export class OdooConnector {
   public write(model: string, id: number, keyword: any): any {
     console.log('Write on:', model);
     const odoo$ = new Observable(observer => {
-      $.xmlrpc({
-        url: this.server + 'object',
-        methodName: 'execute_kw',
-        dataType: 'xmlrpc',
-        crossDomain: true,
-        params: [this.db, this.uid, this.pass, model, 'write', [[id], keyword]],
-        success: (response: any, status: any, jqXHR: any) => {
-          console.log('Write, ' + model + ' status:', status);
-          observer.next(response);
-          observer.complete();
-        },
-        error: (jqXHR: any, status: any, error: any) => {
-          console.log('Write, ' + model + ' status:', status);
+      this.object.methodCall('execute_kw',
+      [this.db, this.uid, this.pass, model, 'write', [[id], keyword]], (error: any, value: any) => {
+        if (error) {
+          console.log('Write, ' + model);
           console.log('Err:', error);
           observer.error(error);
+        } else {
+          console.log('Write, ' + model);
+          observer.next(value);
+          observer.complete();
         }
       });
     });
@@ -155,21 +133,16 @@ export class OdooConnector {
   public create(model: string, keyword?: any): any {
     console.log('Create on:', model);
     const odoo$ = new Observable(observer => {
-      $.xmlrpc({
-        url: this.server + 'object',
-        methodName: 'execute_kw',
-        dataType: 'xmlrpc',
-        crossDomain: true,
-        params: [this.db, this.uid, this.pass, model, 'create', [keyword]],
-        success: (response: any, status: any, jqXHR: any) => {
-          console.log('Create, ' + model + ' status:', status);
-          observer.next(response);
-          observer.complete();
-        },
-        error: (jqXHR: any, status: any, error: any) => {
-          console.log('Create, ' + model + ' status:', status);
+      this.object.methodCall('execute_kw',
+      [this.db, this.uid, this.pass, model, 'create', [keyword]], (error: any, value: any) => {
+        if (error) {
+          console.log('Create, ' + model);
           console.log('Err:', error);
           observer.error(error);
+        } else {
+          console.log('Create, ' + model);
+          observer.next(value);
+          observer.complete();
         }
       });
     });
@@ -180,21 +153,16 @@ export class OdooConnector {
   public fieldsGet(model: string, keyword?: any): any {
     console.log('Fields get on:', model);
     const odoo$ = new Observable(observer => {
-      $.xmlrpc({
-        url: this.server + 'object',
-        methodName: 'execute_kw',
-        dataType: 'xmlrpc',
-        crossDomain: true,
-        params: [this.db, this.uid, this.pass, model, 'fields_get', [keyword]],
-        success: (response: any, status: any, jqXHR: any) => {
-          console.log('Fields get, ' + model + ' status:', status);
-          observer.next(response);
-          observer.complete();
-        },
-        error: (jqXHR: any, status: any, error: any) => {
-          console.log('Fields get, ' + model + ' status:', status);
+      this.object.methodCall('execute_kw',
+      [this.db, this.uid, this.pass, model, 'fields_get', [keyword]], (error: any, value: any) => {
+        if (error) {
+          console.log('Fields get, ' + model);
           console.log('Err:', error);
           observer.error(error);
+        } else {
+          console.log('Fields get, ' + model);
+          observer.next(value);
+          observer.complete();
         }
       });
     });
@@ -205,21 +173,16 @@ export class OdooConnector {
   public renderReport(model: string, id: number): any { // Just Odoo 8, 9, 10
     console.log('Render Report on:', model);
     const odoo$ = new Observable(observer => {
-      $.xmlrpc({
-        url: this.server + 'report',
-        methodName: 'render_report',
-        dataType: 'xmlrpc',
-        crossDomain: true,
-        params: [this.db, this.uid, this.pass, model, [id]],
-        success: (response: any, status: any, jqXHR: any) => {
-          console.log('Render Report, ' + model + ' status:', status);
-          observer.next(response);
-          observer.complete();
-        },
-        error: (jqXHR: any, status: any, error: any) => {
-          console.log('Render Report, ' + model + ' status:', status);
+      this.report.methodCall('render_report',
+      [this.db, this.uid, this.pass, model, model, [id]], (error: any, value: any) => {
+        if (error) {
+          console.log('Render Report, ' + model);
           console.log('Err:', error);
           observer.error(error);
+        } else {
+          console.log('Render Report, ' + model);
+          observer.next(value);
+          observer.complete();
         }
       });
     });
@@ -230,21 +193,16 @@ export class OdooConnector {
   public delete(model: string, id: number): any {
     console.log('Delete on:', model);
     const odoo$ = new Observable(observer => {
-      $.xmlrpc({
-        url: this.server + 'object',
-        methodName: 'execute_kw',
-        dataType: 'xmlrpc',
-        crossDomain: true,
-        params: [this.db, this.uid, this.pass, model, 'unlink', [[id]]],
-        success: (response: any, status: any, jqXHR: any) => {
-          console.log('Delete, ' + model + ' status:', status);
-          observer.next(response);
-          observer.complete();
-        },
-        error: (jqXHR: any, status: any, error: any) => {
-          console.log('Delete, ' + model + ' status:', status);
+      this.object.methodCall('execute_kw',
+      [this.db, this.uid, this.pass, model, 'unlink', [[id]]], (error: any, value: any) => {
+        if (error) {
+          console.log('Delete, ' + model);
           console.log('Err:', error);
           observer.error(error);
+        } else {
+          console.log('Delete, ' + model);
+          observer.next(value);
+          observer.complete();
         }
       });
     });
