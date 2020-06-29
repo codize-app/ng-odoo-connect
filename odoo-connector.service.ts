@@ -1,6 +1,6 @@
 /*
  * Odoo Connector Service by Moldeo Interactive
- * Angular 8
+ * Angular 8, 9
  * Requires jQuery & jQuery-XMLRPC
  *
  * Developer: Ignacio Buioli (ibuioli@gmail.com)
@@ -37,8 +37,8 @@ export class OdooConnector {
         crossDomain: true,
         params: [],
         success: (response: any, status: any, jqXHR: any) => {
-          console.log('Odoo Data:', response);
-          observer.next(response);
+          console.log('Odoo Data:', response[0]);
+          observer.next(response[0]);
           observer.complete();
         },
         error: (jqXHR: any, status: any, error: any) => {
@@ -61,9 +61,9 @@ export class OdooConnector {
         params: [this.db, this.user, this.pass],
         success: (response: any, status: any, jqXHR: any) => {
           console.log('UID:', status);
-          console.log('UID:', response);
+          console.log('UID:', response[0]);
           this.uid = response[0];
-          observer.next(response);
+          observer.next(response[0]);
           observer.complete();
         },
         error: (jqXHR: any, status: any, error: any) => {
@@ -88,7 +88,7 @@ export class OdooConnector {
         params: [this.db, this.uid, this.pass, model, 'search_count', [ param ]],
         success: (response: any, status: any, jqXHR: any) => {
           console.log('Search & Count, ' + model + ' status:', status);
-          observer.next(response);
+          observer.next(response[0]);
           observer.complete();
         },
         error: (jqXHR: any, status: any, error: any) => {
@@ -113,7 +113,7 @@ export class OdooConnector {
         params: [this.db, this.uid, this.pass, model, 'search_read', [ param ] , keyword],
         success: (response: any, status: any, jqXHR: any) => {
           console.log('Search & Read, ' + model + ' status:', status);
-          observer.next(response);
+          observer.next(response[0]);
           observer.complete();
         },
         error: (jqXHR: any, status: any, error: any) => {
@@ -138,7 +138,7 @@ export class OdooConnector {
         params: [this.db, this.uid, this.pass, model, 'write', [[id], keyword]],
         success: (response: any, status: any, jqXHR: any) => {
           console.log('Write, ' + model + ' status:', status);
-          observer.next(response);
+          observer.next(response[0]);
           observer.complete();
         },
         error: (jqXHR: any, status: any, error: any) => {
@@ -163,7 +163,7 @@ export class OdooConnector {
         params: [this.db, this.uid, this.pass, model, 'create', [keyword]],
         success: (response: any, status: any, jqXHR: any) => {
           console.log('Create, ' + model + ' status:', status);
-          observer.next(response);
+          observer.next(response[0]);
           observer.complete();
         },
         error: (jqXHR: any, status: any, error: any) => {
@@ -188,7 +188,7 @@ export class OdooConnector {
         params: [this.db, this.uid, this.pass, model, 'fields_get', [keyword]],
         success: (response: any, status: any, jqXHR: any) => {
           console.log('Fields get, ' + model + ' status:', status);
-          observer.next(response);
+          observer.next(response[0]);
           observer.complete();
         },
         error: (jqXHR: any, status: any, error: any) => {
@@ -213,7 +213,7 @@ export class OdooConnector {
         params: [this.db, this.uid, this.pass, model, [id]],
         success: (response: any, status: any, jqXHR: any) => {
           console.log('Render Report, ' + model + ' status:', status);
-          observer.next(response);
+          observer.next(response[0]);
           observer.complete();
         },
         error: (jqXHR: any, status: any, error: any) => {
