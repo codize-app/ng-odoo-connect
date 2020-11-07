@@ -1,14 +1,15 @@
 /*
  * Odoo Connector Service by Moldeo Interactive
  * Angular 8 - 10
- * Requires xmlrpc - npm i xmlrpc
+ * Requires odoo_api install on Odoo server <https://github.com/codize-app/odoo_api>
  *
  * Developer: Ignacio Buioli <ibuioli@gmail.com>
  * Company: Codize <www.codize.ar>
+ *
+ * Develop for Codize, you are free to use it
  */
 
 import { Observable } from 'rxjs';
-import * as xmlrpc from 'xmlrpc';
 
 export class OdooConnector {
   server: string;

@@ -8,14 +8,11 @@ git submodule add https://github.com/ctmil/ng-odoo-connect.git
 
 ### Install dependencies
 
-```
-npm i xmlrpc
-npm i @types/xmlrpc
-```
+It requires odoo_module installed on Odoo server
 
-### Solution for commons errors
-
-In recent Angular versions, the system can't recognize http and https node modules. For this, first search the file ```node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js``` and replace ```node: false``` by ```node: {http:true,https:true,url:true}```
+```
+git clone https://github.com/codize-app/odoo_api
+```
 
 ### Example
 
