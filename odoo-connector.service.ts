@@ -1,11 +1,10 @@
 /*
  * Odoo Connector Service by Moldeo Interactive
- * Angular 8, 9
+ * Angular 8 - 11
  * Requires jQuery & jQuery-XMLRPC
  *
- * Developer: Ignacio Buioli (ibuioli@gmail.com)
- * Company: Moldeo Interactive (www.moldeointeractive.com.ar)
- * Company Contact: info@moldeointeractive.com.ar
+ * Developer: Ignacio Buioli <ibuioli@gmail.com>
+ * Company: Codize <www.codize.ar>
  */
 
 import { Observable } from 'rxjs';
