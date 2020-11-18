@@ -251,4 +251,29 @@ export class OdooConnector {
 
     return odoo$;
   }
+
+  public custom(model: string, id: number, action: string): any {
+    console.log('Model:', model, 'Action:', action);
+    const odoo$ = new Observable(observer => {
+      $.xmlrpc({
+        url: this.server + 'object',
+        methodName: 'execute_kw',
+        dataType: 'xmlrpc',
+        crossDomain: true,
+        params: [this.db, this.uid, this.pass, model, action, [[id]]],
+        success: (response: any, status: any, jqXHR: any) => {
+          console.log('Custom Action, ' + action + ' - ' + model + ' status:', status);
+          observer.next(response);
+          observer.complete();
+        },
+        error: (jqXHR: any, status: any, error: any) => {
+          console.log('Custom Action, ' + model + ' status:', status);
+          console.log('Err:', error);
+          observer.error(error);
+        }
+      });
+    });
+
+    return odoo$;
+  }
 }
