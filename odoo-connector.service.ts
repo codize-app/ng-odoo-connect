@@ -10,16 +10,24 @@
  */
 
 import { Observable } from 'rxjs';
+import { Inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({
+  providedIn: 'root'
+})
 
 export class OdooConnector {
-  server: string;
-  db: string;
-  user: string;
-  pass: string;
-  uid: string;
 
-  constructor(server: string, db: string, user: string, pass: string, uid?: string) {
-    this.server = server + '/xmlrpc/2/';
+  constructor(
+    private http: HttpClient,
+    @Inject('server') private server: string,
+    @Inject('db') private db: string,
+    @Inject('user') private user: string,
+    @Inject('pass') private pass: string,
+    @Inject('uid') private uid?: string
+  ) {
+    this.server = server + '/odoo-api/';
     this.db = db;
     this.user = user;
     this.pass = pass;
@@ -28,15 +36,15 @@ export class OdooConnector {
 
   public data(): any {
     console.log('Getting Odoo Data');
-    const common = xmlrpc.createClient(this.server + 'common');
     const odoo$ = new Observable(observer => {
-      common.methodCall('version', [], (error: any, value: any) => {
-        if (error) {
-          console.log('Err:', error);
-          observer.error(error);
+      this.http.post<any>(this.server + 'common/version',
+      {params: {}}).subscribe(data => {
+        if (data.result.error) {
+          console.log('Err:', data.result.error);
+          observer.error(data.result.error);
         } else {
-          console.log('Odoo Data:', value);
-          observer.next(value);
+          console.log('Odoo Data:', data.result);
+          observer.next(data.result);
           observer.complete();
         }
       });
@@ -47,16 +55,16 @@ export class OdooConnector {
 
   public login(): any {
     console.log('Getting UID');
-    const common = xmlrpc.createClient(this.server + 'common');
     const odoo$ = new Observable(observer => {
-      common.methodCall('login', [this.db, this.user, this.pass], (error: any, value: any) => {
-        if (error) {
-          console.log('Err:', error);
-          observer.error(error);
+      this.http.post<any>(this.server + 'common/login',
+      {params: {db: this.db, login: this.user, password: this.pass}}).subscribe(data => {
+        if (data.result.error) {
+          console.log('Err:', data.result.error);
+          observer.error(data.result.error);
         } else {
-          console.log('UID:', value);
-          this.uid = value;
-          observer.next(value);
+          console.log('UID:', data.result);
+          this.uid = data.result;
+          observer.next(data.result);
           observer.complete();
         }
       });
@@ -65,7 +73,7 @@ export class OdooConnector {
     return odoo$;
   }
 
-  public searchCount(model: string, param?: any): any {
+  /*public searchCount(model: string, param?: any): any {
     console.log('Search & Count:', model);
     const object = xmlrpc.createClient(this.server + 'object');
     const odoo$ = new Observable(observer => {
@@ -209,5 +217,5 @@ export class OdooConnector {
     });
 
     return odoo$;
-  }
+  }*/
 }
