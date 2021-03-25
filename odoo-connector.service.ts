@@ -126,12 +126,12 @@ export class OdooConnector {
     return odoo$;
   }
 
-  public create(model: string, keyword?: any): any {
+  public create(model: string, values?: any, keyword?: any): any {
     console.log('Create on:', model);
     const object = xmlrpc.createClient(this.server + 'object');
     const odoo$ = new Observable(observer => {
       object.methodCall('execute_kw',
-      [this.db, this.uid, this.pass, model, 'create', [keyword]], (error: any, value: any) => {
+      [this.db, this.uid, this.pass, model, 'create', [values], keyword], (error: any, value: any) => {
         if (error) {
           console.log('Create, ' + model);
           console.log('Err:', error);
