@@ -18,6 +18,7 @@ git clone https://github.com/codize-app/odoo_api
 
 ```javascript
 odoo = new OdooConnector(
+    this.http,
     'http://localhost:8069',
     'odoo',
     'admin',
