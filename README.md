@@ -15,7 +15,19 @@ npm i @types/xmlrpc
 
 ### Solution for commons errors
 
-In recent Angular versions, the system can't recognize http and https node modules. For this, first search the file ```node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js``` and replace ```node: false``` by ```node: {http:true,https:true,url:true}```
+In recent Angular versions, the system can't recognize http and https node modules. For this, first search the file 
+
+```
+node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js
+```
+
+Or on Angular 11+:
+
+```
+node_modules/@angular-devkit/build-angular/src/webpack/configs/browser.js
+```
+
+And replace ```node: false``` by ```node: {http:true,https:true,url:true}```
 
 ### Example
 
