@@ -151,7 +151,7 @@ export class OdooConnector {
     return odoo$;
   }
 
-  public create(model: string, keyword?: any): any {
+  public create(model: string, values?: any, keyword?: any): any {
     console.log('Create on:', model);
     const odoo$ = new Observable(observer => {
       $.xmlrpc({
@@ -159,7 +159,7 @@ export class OdooConnector {
         methodName: 'execute_kw',
         dataType: 'xmlrpc',
         crossDomain: true,
-        params: [this.db, this.uid, this.pass, model, 'create', [keyword]],
+        params: [this.db, this.uid, this.pass, model, 'create', [values], keyword],
         success: (response: any, status: any, jqXHR: any) => {
           console.log('Create, ' + model + ' status:', status);
           observer.next(response[0]);
