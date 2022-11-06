@@ -192,4 +192,24 @@ export class OdooConnector {
 
     return odoo$;
   }
+  
+  public report(model: string, id: number, report_name: string): any {
+    console.log('Report on:', model);
+    const odoo$ = new Observable(observer => {
+      this.http.post<any>(this.server + 'object/report',
+      {params: {db: this.db, login: this.user, password: this.pass, model, id, report_name}}).subscribe(data => {
+        if (data.result.error) {
+          console.log('Err:', data.result.error);
+          observer.error(data.result.error);
+        } else {
+          console.log('Report:', data.result);
+          this.uid = data.result;
+          observer.next(data.result);
+          observer.complete();
+        }
+      });
+    });
+
+    return odoo$;
+  }
 }
