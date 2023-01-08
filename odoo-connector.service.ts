@@ -1,6 +1,6 @@
 /*
  * Odoo Connector Service by Moldeo Interactive
- * Angular 8 - 10
+ * Angular 8+
  * Requires xmlrpc - npm i xmlrpc
  *
  * Developer: Ignacio Buioli <ibuioli@gmail.com>
@@ -26,12 +26,12 @@ export class OdooConnector {
   }
 
   public data(): any {
-    console.log('Getting Odoo Data');
+    console.info('Getting Odoo Data');
     const common = xmlrpc.createClient(this.server + 'common');
     const odoo$ = new Observable(observer => {
       common.methodCall('version', [], (error: any, value: any) => {
         if (error) {
-          console.log('Err:', error);
+          console.error(error);
           observer.error(error);
         } else {
           console.log('Odoo Data:', value);
@@ -45,12 +45,12 @@ export class OdooConnector {
   }
 
   public login(): any {
-    console.log('Getting UID');
+    console.info('Getting UID');
     const common = xmlrpc.createClient(this.server + 'common');
     const odoo$ = new Observable(observer => {
       common.methodCall('login', [this.db, this.user, this.pass], (error: any, value: any) => {
         if (error) {
-          console.log('Err:', error);
+          console.error(error);
           observer.error(error);
         } else {
           console.log('UID:', value);
@@ -65,13 +65,13 @@ export class OdooConnector {
   }
 
   public searchCount(model: string, param?: any): any {
-    console.log('Search & Count:', model);
+    console.info('Search & Count:', model);
     const object = xmlrpc.createClient(this.server + 'object');
     const odoo$ = new Observable(observer => {
       object.methodCall('execute_kw', [this.db, this.uid, this.pass, model, 'search_count', [ param ]], (error: any, value: any) => {
         if (error) {
-          console.log('Search & Count, ' + model);
-          console.log('Err:', error);
+          console.info('Search & Count, ' + model);
+          console.error(error);
           observer.error(error);
         } else {
           console.log('Search & Count, ' + model);
@@ -85,14 +85,14 @@ export class OdooConnector {
   }
 
   public searchRead(model: string, param?: any, keyword?: any): any {
-    console.log('Search & Read:', model);
+    console.info('Search & Read:', model);
     const object = xmlrpc.createClient(this.server + 'object');
     const odoo$ = new Observable(observer => {
       object.methodCall('execute_kw',
       [this.db, this.uid, this.pass, model, 'search_read', [ param ], keyword], (error: any, value: any) => {
         if (error) {
-          console.log('Search & Read, ' + model);
-          console.log('Err:', error);
+          console.info('Search & Read, ' + model);
+          console.error(error);
           observer.error(error);
         } else {
           console.log('Search & Read, ' + model);
@@ -106,14 +106,14 @@ export class OdooConnector {
   }
 
   public write(model: string, id: number, keyword: any): any {
-    console.log('Write on:', model);
+    console.info('Write on:', model);
     const object = xmlrpc.createClient(this.server + 'object');
     const odoo$ = new Observable(observer => {
       object.methodCall('execute_kw',
       [this.db, this.uid, this.pass, model, 'write', [[id], keyword]], (error: any, value: any) => {
         if (error) {
-          console.log('Write, ' + model);
-          console.log('Err:', error);
+          console.info('Write, ' + model);
+          console.error(error);
           observer.error(error);
         } else {
           console.log('Write, ' + model);
@@ -127,14 +127,14 @@ export class OdooConnector {
   }
 
   public create(model: string, values?: any, keyword?: any): any {
-    console.log('Create on:', model);
+    console.info('Create on:', model);
     const object = xmlrpc.createClient(this.server + 'object');
     const odoo$ = new Observable(observer => {
       object.methodCall('execute_kw',
       [this.db, this.uid, this.pass, model, 'create', [values], keyword], (error: any, value: any) => {
         if (error) {
-          console.log('Create, ' + model);
-          console.log('Err:', error);
+          console.info('Create, ' + model);
+          console.error(error);
           observer.error(error);
         } else {
           console.log('Create, ' + model);
@@ -148,14 +148,14 @@ export class OdooConnector {
   }
 
   public fieldsGet(model: string, keyword?: any): any {
-    console.log('Fields get on:', model);
+    console.info('Fields get on:', model);
     const object = xmlrpc.createClient(this.server + 'object');
     const odoo$ = new Observable(observer => {
       object.methodCall('execute_kw',
       [this.db, this.uid, this.pass, model, 'fields_get', [keyword]], (error: any, value: any) => {
         if (error) {
-          console.log('Fields get, ' + model);
-          console.log('Err:', error);
+          console.info('Fields get, ' + model);
+          console.error(error);
           observer.error(error);
         } else {
           console.log('Fields get, ' + model);
@@ -169,14 +169,14 @@ export class OdooConnector {
   }
 
   public renderReport(model: string, id: number): any { // Just Odoo 8, 9, 10
-    console.log('Render Report on:', model);
+    console.info('Render Report on:', model);
     const report = xmlrpc.createClient(this.server + 'report');
     const odoo$ = new Observable(observer => {
       report.methodCall('render_report',
       [this.db, this.uid, this.pass, model, model, [id]], (error: any, value: any) => {
         if (error) {
-          console.log('Render Report, ' + model);
-          console.log('Err:', error);
+          console.info('Render Report, ' + model);
+          console.error(error);
           observer.error(error);
         } else {
           console.log('Render Report, ' + model);
@@ -190,14 +190,14 @@ export class OdooConnector {
   }
 
   public delete(model: string, id: number): any {
-    console.log('Delete on:', model);
+    console.info('Delete on:', model);
     const object = xmlrpc.createClient(this.server + 'object');
     const odoo$ = new Observable(observer => {
       object.methodCall('execute_kw',
       [this.db, this.uid, this.pass, model, 'unlink', [[id]]], (error: any, value: any) => {
         if (error) {
-          console.log('Delete, ' + model);
-          console.log('Err:', error);
+          console.info('Delete, ' + model);
+          console.error(error);
           observer.error(error);
         } else {
           console.log('Delete, ' + model);
