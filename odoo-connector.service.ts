@@ -35,12 +35,12 @@ export class OdooConnector {
   }
 
   public data(): any {
-    console.log('Getting Odoo Data');
+    console.info('Getting Odoo Data');
     const odoo$ = new Observable(observer => {
       this.http.post<any>(this.server + 'common/version',
       {params: {}}).subscribe(data => {
         if (data.result.error) {
-          console.log('Err:', data.result.error);
+          console.error(data.result.error);
           observer.error(data.result.error);
         } else {
           console.log('Odoo Data:', data.result);
@@ -54,12 +54,12 @@ export class OdooConnector {
   }
 
   public login(): any {
-    console.log('Getting UID');
+    console.info('Getting UID');
     const odoo$ = new Observable(observer => {
       this.http.post<any>(this.server + 'common/login',
       {params: {db: this.db, login: this.user, password: this.pass}}).subscribe(data => {
         if (data.result.error) {
-          console.log('Err:', data.result.error);
+          console.error(data.result.error);
           observer.error(data.result.error);
         } else {
           console.log('UID:', data.result);
@@ -74,12 +74,12 @@ export class OdooConnector {
   }
 
   public searchCount(model: string, param?: any): any {
-    console.log('Search & Count:', model);
+    console.info('Search & Count:', model);
     const odoo$ = new Observable(observer => {
       this.http.post<any>(this.server + 'object/search_count',
       {params: {db: this.db, login: this.user, password: this.pass, model, filters: param}}).subscribe(data => {
         if (data.result.error) {
-          console.log('Err:', data.result.error);
+          console.error(data.result.error);
           observer.error(data.result.error);
         } else {
           console.log('Search & Count:', data.result);
@@ -94,12 +94,12 @@ export class OdooConnector {
   }
 
   public searchRead(model: string, param?: any, keyword?: any): any {
-    console.log('Search & Read:', model);
+    console.info('Search & Read:', model);
     const odoo$ = new Observable(observer => {
       this.http.post<any>(this.server + 'object/search_read',
       {params: {db: this.db, login: this.user, password: this.pass, model, filters: param, keys: keyword}}).subscribe(data => {
         if (data.result.error) {
-          console.log('Err:', data.result.error);
+          console.error(data.result.error);
           observer.error(data.result.error);
         } else {
           console.log('Search & Read:', data.result);
@@ -114,12 +114,12 @@ export class OdooConnector {
   }
 
   public write(model: string, id: number, keyword: any): any {
-    console.log('Write on:', model);
+    console.info('Write on:', model);
     const odoo$ = new Observable(observer => {
       this.http.post<any>(this.server + 'object/write',
       {params: {db: this.db, login: this.user, password: this.pass, model, id, vals: keyword}}).subscribe(data => {
         if (data.result.error) {
-          console.log('Err:', data.result.error);
+          console.error(data.result.error);
           observer.error(data.result.error);
         } else {
           console.log('Write:', data.result);
@@ -134,12 +134,12 @@ export class OdooConnector {
   }
 
   public create(model: string, keyword?: any): any {
-    console.log('Create on:', model);
+    console.info('Create on:', model);
     const odoo$ = new Observable(observer => {
       this.http.post<any>(this.server + 'object/create',
       {params: {db: this.db, login: this.user, password: this.pass, model, vals: keyword}}).subscribe(data => {
         if (data.result.error) {
-          console.log('Err:', data.result.error);
+          console.error(data.result.error);
           observer.error(data.result.error);
         } else {
           console.log('Create:', data.result);
@@ -154,12 +154,12 @@ export class OdooConnector {
   }
 
   public fieldsGet(model: string, keyword?: any): any {
-    console.log('Fields get on:', model);
+    console.info('Fields get on:', model);
     const odoo$ = new Observable(observer => {
       this.http.post<any>(this.server + 'object/fields_get',
       {params: {db: this.db, login: this.user, password: this.pass, model, keys: keyword}}).subscribe(data => {
         if (data.result.error) {
-          console.log('Err:', data.result.error);
+          console.error(data.result.error);
           observer.error(data.result.error);
         } else {
           console.log('Fields Get:', data.result);
@@ -174,12 +174,12 @@ export class OdooConnector {
   }
 
   public delete(model: string, id: number): any {
-    console.log('Delete on:', model);
+    console.info('Delete on:', model);
     const odoo$ = new Observable(observer => {
       this.http.post<any>(this.server + 'object/unlink',
       {params: {db: this.db, login: this.user, password: this.pass, model, id}}).subscribe(data => {
         if (data.result.error) {
-          console.log('Err:', data.result.error);
+          console.error(data.result.error);
           observer.error(data.result.error);
         } else {
           console.log('Delete:', data.result);
@@ -194,12 +194,12 @@ export class OdooConnector {
   }
   
   public report(model: string, id: number, report_name: string): any {
-    console.log('Report on:', model);
+    console.info('Report on:', model);
     const odoo$ = new Observable(observer => {
       this.http.post<any>(this.server + 'object/report',
       {params: {db: this.db, login: this.user, password: this.pass, model, id, report_name}}).subscribe(data => {
         if (data.result.error) {
-          console.log('Err:', data.result.error);
+          console.error(data.result.error);
           observer.error(data.result.error);
         } else {
           console.log('Report:', data.result);
