@@ -8,7 +8,7 @@ git submodule add https://github.com/codize-app/ng-odoo-connect.git
 
 ### Install dependencies
 
-It requires odoo_module installed on Odoo server
+It requires odoo_api module installed on Odoo server
 
 ```
 git clone https://github.com/codize-app/odoo_api
